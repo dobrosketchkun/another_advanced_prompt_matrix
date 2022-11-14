@@ -14,7 +14,7 @@ import modules.sd_samplers
 
 class Script(scripts.Script):
     def title(self):
-        return "Advanced prompt matrix"
+        return "Another advanced prompt matrix"
 
     def ui(self, is_img2img):
         # dummy = gr.Checkbox(label="")
