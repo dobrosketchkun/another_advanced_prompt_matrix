@@ -3,4 +3,11 @@ Refer to [custom scripts wiki page](https://github.com/AUTOMATIC1111/stable-diff
 
 
 ### List   
-* [another_advanced_prompt_matrix.py](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/scripts)
+* [another_advanced_prompt_matrix.py](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/scripts)   
+Just another variant of advanced prompt matrix script.
+
+
+* [random_tags_prompt](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/stand-alone_scripts/random_tags_prompt)   
+Generates a prompt of random danbooru tags (names and sources mostly excluded)
+
+
