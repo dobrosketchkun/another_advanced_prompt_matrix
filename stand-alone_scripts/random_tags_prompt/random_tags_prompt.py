@@ -27,6 +27,9 @@ data_caped_proc = [_[1] for _ in data_caped]
 prompt = random.sample(data_caped_proc, length)
 prompt = [[__ for __ in _ if __] for _ in prompt]
 prompt = [random.sample(_,1)[0] for _ in prompt]
-prompt = ', '.join(random.sample(prompt, length)).replace('"', '')
+prompt = ', '.join(random.sample(prompt, length))
+prompt = prompt.replace('"', '')
 prompt = prompt.replace('_',' ')
+prompt = prompt.replace('(','\\(')
+prompt = prompt.replace(')','\\)')
 print(prompt)
