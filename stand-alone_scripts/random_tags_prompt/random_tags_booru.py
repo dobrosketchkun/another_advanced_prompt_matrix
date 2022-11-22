@@ -1,5 +1,3 @@
-# FULL
-
 import requests
 from bs4 import BeautifulSoup
 import sys
@@ -14,15 +12,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
         'Accept-Language': 'en-US,en;q=0.8',
         'Connection': 'keep-alive'}
 
-
-# gelbooru, danbooru, safebooru
-try:
-    SOURCE = sys.argv[1]
-except Exception as e:
-    SOURCE = 'gelbooru'
-
-if SOURCE == 'danbooru':
-    url = 'https://danbooru.donmai.us/posts/random'
+def get_danbooru(url='https://danbooru.donmai.us/posts/random'):
     r = requests.get(url, headers=headers, allow_redirects=True)
 
 
@@ -55,14 +45,10 @@ if SOURCE == 'danbooru':
 
     all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
     all_the_tags = all_the_tags.replace('_', ' ')
-    print(r.url, '\n')
-    print(all_the_tags)
+    return r.url + '\n'*2 + all_the_tags
 
 
-
-elif SOURCE == 'gelbooru':
-
-    url = 'https://gelbooru.com/index.php?page=post&s=random'
+def get_gelbooru(url='https://gelbooru.com/index.php?page=post&s=random'):
     r = requests.get(url, headers=headers, allow_redirects=True)
     r.text
 
@@ -86,11 +72,10 @@ elif SOURCE == 'gelbooru':
 
     all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
     all_the_tags = all_the_tags.replace('_', ' ')
-    print(r.url, '\n')
-    print(all_the_tags)
+    return r.url + '\n'*2 + all_the_tags
 
-elif SOURCE == 'safebooru':
-    url = 'https://safebooru.org/index.php?page=post&s=random'
+
+def get_safebooru(url='https://safebooru.org/index.php?page=post&s=random'):
     r = requests.get(url, headers=headers, allow_redirects=True)
 
 
@@ -116,9 +101,46 @@ elif SOURCE == 'safebooru':
 
     all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
     all_the_tags = all_the_tags.replace('_', ' ')
-    print(r.url, '\n')
-    print(all_the_tags)
+    return r.url + '\n'*2 + all_the_tags
+
+
+
+# gelbooru, danbooru, safebooru
+try:
+    ARGV = sys.argv
+    SOURCE = ARGV[1]
+except Exception as e:
+    SOURCE = 'gelbooru'
+
+url = None
+
+
+if SOURCE == 'url':
+    url = ARGV[-1]
+    type_booru = url.split('/')[2].split('.')[0]
+    SOURCE = type_booru
+
+
+if SOURCE == 'danbooru':
+    if not url:
+        url = 'https://danbooru.donmai.us/posts/random'
+    prompt = get_danbooru(url)
+    print(prompt)
+
+
+elif SOURCE == 'gelbooru':
+    if not url:
+        url = 'https://gelbooru.com/index.php?page=post&s=random'
+    prompt = get_gelbooru(url)
+    print(prompt)
+
+elif SOURCE == 'safebooru':
+    if not url:
+        url = 'https://safebooru.org/index.php?page=post&s=random'
+    prompt = get_safebooru(url)
+    print(prompt)
 
 
 else:
     print('You can use only gelbooru, danbooru or safebooru links!')
+    print(f'Your arguments are { ARGV}')
