@@ -7,7 +7,12 @@ Refer to [custom scripts wiki page](https://github.com/AUTOMATIC1111/stable-diff
 Just another variant of advanced prompt matrix script.
 
 
-* [random_tags_prompt](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/stand-alone_scripts/random_tags_prompt)   
+* random tags   
+  - [random_tags_prompt.py](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/stand-alone_scripts/random_tags_prompt)   
 Generates a prompt of random danbooru tags (names and sources mostly excluded)
+  - [random_tags_booru.py
+](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/stand-alone_scripts/random_tags_prompt)   
+Generates a prompt of random danbooru or gelbooru posts (by default it uses only general tags, it could be changed inside)
+
 
 
