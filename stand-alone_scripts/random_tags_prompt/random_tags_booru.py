@@ -1,3 +1,5 @@
+# FULL
+
 import requests
 from bs4 import BeautifulSoup
 import sys
@@ -13,7 +15,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
         'Connection': 'keep-alive'}
 
 
-# gelbooru and danbooru
+# gelbooru, danbooru, safebooru
 try:
     SOURCE = sys.argv[1]
 except Exception as e:
@@ -42,7 +44,7 @@ if SOURCE == 'danbooru':
      ['meta-tag-list', "tag-type-5"]]
 
 
-    tag_types_idx = [0]  # add indexes from tag_types if you want other ones, for example [-1, 0, 3] 
+    tag_types_idx = [0]
 
     all_the_tags = []
 
@@ -74,7 +76,7 @@ elif SOURCE == 'gelbooru':
     'tag-type-general']
 
 
-    tag_types_idx = [-1] # add indexes from tag_types if you want other ones, for example [-1, 0, 3] 
+    tag_types_idx = [-1]
 
     all_the_tags = []
     for tag_type_idx in tag_types_idx:
@@ -86,5 +88,37 @@ elif SOURCE == 'gelbooru':
     all_the_tags = all_the_tags.replace('_', ' ')
     print(r.url, '\n')
     print(all_the_tags)
+
+elif SOURCE == 'safebooru':
+    url = 'https://safebooru.org/index.php?page=post&s=random'
+    r = requests.get(url, headers=headers, allow_redirects=True)
+
+
+    soup = BeautifulSoup(r.text,'html.parser')
+    tab = soup.find("ul",{"id":"tag-sidebar"})
+
+
+    tag_types = ['tag-type-copyright tag',
+    'tag-type-character tag',
+    'tag-type-artist tag',
+    'tag-type-general tag',
+    'tag-type-metadata tag']
+    tag_types = [_.split(' ') for _ in tag_types]
+
+    tag_types_idx = [-2]
+
+    all_the_tags = []
+    for tag_type_idx in tag_types_idx:
+        tag_type = tag_types[tag_type_idx]
+        tags = [_ for _ in tab.findAll('li') if _.get('class') == tag_types[tag_type_idx]]
+        all_the_tags.append([[_.text for _ in tag.findAll('a')][-1] for tag in tags])
+
+
+    all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
+    all_the_tags = all_the_tags.replace('_', ' ')
+    print(r.url, '\n')
+    print(all_the_tags)
+
+
 else:
-    print('You can use only gelbooru and danbooru links!')
+    print('You can use only gelbooru, danbooru or safebooru links!')
