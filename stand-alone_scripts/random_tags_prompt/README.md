@@ -1,3 +1,5 @@
+## random_tags_prompt.py
+
 Generates a prompt of random danbooru tags (names and sources mostly excluded)
 
 Usage:   
@@ -6,3 +8,12 @@ or
 `python random_tags_prompt.py NUMBER_OF_TAGS`      
 
 You can get tags in [this repository](https://github.com/DominikDoom/a1111-sd-webui-tagcomplete/tree/main/tags) or use the copy in here (possibly outdated)
+
+
+## random_tags_booru.py
+
+Generates a prompt of random danbooru or gelbooru posts (by default it uses only general tags, it could be changed inside)    
+
+Usage:  
+`python random_tags_booru.py` - fetched tags from the SOURCE variable site   
+`python random_tags_booru.py danbooru` or `python random_tags_booru.py gelbooru` -  fetched tags from the explicitly stated site
