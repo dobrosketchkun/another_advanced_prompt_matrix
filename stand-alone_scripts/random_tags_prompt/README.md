@@ -16,4 +16,8 @@ Generates a prompt of random danbooru or gelbooru posts (by default it uses only
 
 Usage:  
 `python random_tags_booru.py` - fetched tags from the SOURCE variable site   
-`python random_tags_booru.py BOORU`  -  fetched tags from the explicitly stated site (gelbooru, danbooru or safebooru)
+`python random_tags_booru.py BOORU`  -  fetched tags from the explicitly stated site (gelbooru, danbooru or safebooru)    
+
+
+You also can fetch tags from a specific post from the booru site:   
+`python random_tags_booru.py url "URL"`
