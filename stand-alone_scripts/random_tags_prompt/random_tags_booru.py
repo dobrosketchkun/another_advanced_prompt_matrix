@@ -103,7 +103,16 @@ def get_safebooru(url='https://safebooru.org/index.php?page=post&s=random'):
     all_the_tags = all_the_tags.replace('_', ' ')
     return r.url + '\n'*2 + all_the_tags
 
-
+# def download_page(prompt):
+#     ''' for gcolab use '''
+#     url_page = '"' + prompt.split('\n')[0] + '"'
+#     !wget $url_page -O 'webpage'
+#     with open('webpage', 'r') as f:
+#         data = f.readlines()
+#     url_img = [_ for _ in data if '<meta property="og:image" itemprop="image" content="' in _][0]
+#     url_img = url_img.split('content="')[-1].split('" />')[0]
+#     !wget $url_img -O 'img.jpg'
+#     display(Image('img.jpg'))
 
 # gelbooru, danbooru, safebooru
 try:
