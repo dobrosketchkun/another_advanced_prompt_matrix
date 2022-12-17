@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import sys
-
+import random 
 
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) ' 
                       'AppleWebKit/537.11 (KHTML, like Gecko) '
@@ -122,12 +122,39 @@ except Exception as e:
     SOURCE = 'gelbooru'
 
 url = None
-
+search = None
 
 if SOURCE == 'url':
     url = ARGV[-1]
     type_booru = url.split('/')[2].split('.')[0]
     SOURCE = type_booru
+
+if SOURCE == 'search':
+    type_booru = ARGV[2]
+    search = '+'.join(ARGV[3:])
+    SOURCE = type_booru
+    if SOURCE == 'safebooru':
+        url_search = f"https://safebooru.org/index.php?page=post&s=list&tags={search.replace(' ', '+')}"
+        print(url_search, '\n')
+        r = requests.get(url_search, headers=headers, allow_redirects=True)
+
+        soup = BeautifulSoup(r.text,'html.parser')
+        tab = soup.find("div",{"class":"pagination"})
+
+        last_page = int([_ for _ in tab][-1]['href'].split('pid=')[-1])//40
+        page = random.randint(1, last_page)
+        new_url = f"https://safebooru.org/index.php?page=post&s=list&tags={search.replace(' ', '+')}&pid={page*40%last_page}"
+        r = requests.get(new_url, headers=headers, allow_redirects=True)
+
+        soup = BeautifulSoup(r.text,'html.parser')
+        tab = soup.find("div",{"class":"content"})
+        url_list = [_['href'] for _ in tab.findAll('a') if 'pid=' not in _['href']]
+
+        url = f'https://safebooru.org/{random.choice(url_list)}'
+
+    else:
+        assert False, "Only safebooru is implemented"
+
 
 
 if SOURCE == 'danbooru':
