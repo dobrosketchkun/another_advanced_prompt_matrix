@@ -27,7 +27,7 @@ class Script(scripts.Script):
         checkbox_iterate_batch = gr.Checkbox(label="Use same random seed for all lines", value=False)
         counts = gr.Textbox(label="Number of combinations", lines=1, placeholder='1')
 
-        return [info, counts, checkbox_iterate]
+        return [info, counts, checkbox_iterate, checkbox_iterate_batch]
 
 
     def run(self, p, info, counts, checkbox_iterate):
