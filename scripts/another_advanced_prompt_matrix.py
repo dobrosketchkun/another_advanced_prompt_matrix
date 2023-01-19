@@ -30,7 +30,7 @@ class Script(scripts.Script):
         return [info, counts, checkbox_iterate, checkbox_iterate_batch]
 
 
-    def run(self, p, info, counts, checkbox_iterate):
+    def run(self, p, info, counts, checkbox_iterate, *args, **kargs):
         def chooser(number):
             return number >= random.random()
         modules.processing.fix_seed(p)
