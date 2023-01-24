@@ -21,3 +21,6 @@ Usage:
 
 You also can fetch tags from a specific post from the booru site:   
 `python random_tags_booru.py url "URL"`
+
+Experimental feature for `safebooru`:   
+`python random_tags_booru.py search safebooru TAG-OR-SOMETHING`
