@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup
 import sys
 import random 
 
+def print_p(text):
+    text = text.replace('(', '\(').replace(')', '\)')
+    print(text)
+    
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) ' 
                       'AppleWebKit/537.11 (KHTML, like Gecko) '
                       'Chrome/23.0.1271.64 Safari/537.11',
@@ -161,20 +165,20 @@ if SOURCE == 'danbooru':
     if not url:
         url = 'https://danbooru.donmai.us/posts/random'
     prompt = get_danbooru(url)
-    print(prompt)
+    print_p(prompt)
 
 
 elif SOURCE == 'gelbooru':
     if not url:
         url = 'https://gelbooru.com/index.php?page=post&s=random'
     prompt = get_gelbooru(url)
-    print(prompt)
+    print_p(prompt)
 
 elif SOURCE == 'safebooru':
     if not url:
         url = 'https://safebooru.org/index.php?page=post&s=random'
     prompt = get_safebooru(url)
-    print(prompt)
+    print_p(prompt)
 
 
 else:
