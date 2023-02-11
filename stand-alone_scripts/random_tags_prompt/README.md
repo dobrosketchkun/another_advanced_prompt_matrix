@@ -24,3 +24,11 @@ You also can fetch tags from a specific post from the booru site:
 
 Experimental feature for `safebooru`:   
 `python random_tags_booru.py search safebooru TAG-OR-SOMETHING`
+
+
+## for_dataset.py
+
+Downloads an image and create a txt file with all the tags.    
+
+Usage:  
+`python for_dataset.py url-of-an-image`  # Only from gelbooru, danbooru, safebooru and e621
