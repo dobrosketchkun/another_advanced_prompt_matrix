@@ -3,10 +3,8 @@ from bs4 import BeautifulSoup
 import sys
 import random 
 
-def print_p(text):
-    text = text.replace('(', '\(').replace(')', '\)')
-    print(text)
-    
+import cloudscraper
+
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) ' 
                       'AppleWebKit/537.11 (KHTML, like Gecko) '
                       'Chrome/23.0.1271.64 Safari/537.11',
@@ -16,11 +14,18 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
         'Accept-Language': 'en-US,en;q=0.8',
         'Connection': 'keep-alive'}
 
+def print_p(text):
+    text = text.replace('(', '\(').replace(')', '\)')
+    print(text)
+
 def get_danbooru(url='https://danbooru.donmai.us/posts/random'):
-    r = requests.get(url, headers=headers, allow_redirects=True)
+    # r = requests.get(url, headers=headers, allow_redirects=True)
 
+    scraper = cloudscraper.create_scraper(delay=10,   browser={'custom': 'firefox', 'platform': 'linux',})
+    r = scraper.get(url)
+    text = r.content
 
-    soup = BeautifulSoup(r.text,'html.parser')
+    soup = BeautifulSoup(text,'html.parser')
     tab = soup.find("div",{"class":"tag-list categorized-tag-list"})
     tables = tab.findAll('ul')
 
