@@ -1,11 +1,10 @@
-
-
 import requests
 from bs4 import BeautifulSoup
 import sys
 import random
 import shutil
 
+import cloudscraper
 
 ALL_THE_TAGS = True
 
@@ -20,11 +19,19 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
 
 
 def danbooru_dataset(url='https://danbooru.donmai.us/posts/random', tags_all=True, additional_tags= ''):
-  r = requests.get(url, headers=headers, allow_redirects=True)
+
+  scraper = cloudscraper.create_scraper(delay=10,   browser={'custom': 'firefox', 'platform': 'linux',})
+  req = scraper.get(url)
+  text = req.content
+  
+  
+  
+  # r = requests.get(url, headers=headers, allow_redirects=True)
 
 
-  soup = BeautifulSoup(r.text,'html.parser')
+  soup = BeautifulSoup(text,'html.parser')
   tab = soup.find("div",{"class":"tag-list categorized-tag-list"})
+
   tables = tab.findAll('ul')
 
   tag_dict = {table.get('class')[0]:table for table in tab.findAll('ul')}
@@ -48,14 +55,20 @@ def danbooru_dataset(url='https://danbooru.donmai.us/posts/random', tags_all=Tru
   all_the_tags = []
 
   for tag_idx in tag_types_idx:
-      tag_slice = tag_dict[tag_types[tag_idx][0]]
-      all_the_tags.append([_['data-tag-name'] for _ in tag_slice.findAll('li')])
+      try:
+          tag_slice = tag_dict[tag_types[tag_idx][0]]
+          all_the_tags.append([_['data-tag-name'] for _ in tag_slice.findAll('li')])
+      except Exception as e:
+          print('ERROR:', e)
 
   all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
   all_the_tags = all_the_tags.replace('_', ' ')
   all_the_tags = all_the_tags.replace('(', '\(').replace(')', '\)')
 
-  img_link = r.text.split('Size: <a href="')[1].split('">')[0]
+
+  img_link = text.decode('utf-8').split('Size: <a href="')
+  img_link = img_link[1].split('">')
+  img_link = img_link[0]
 
   file_name = img_link.split('/')[-1]
 
@@ -99,10 +112,12 @@ def gelbooru_dataset(url='https://gelbooru.com/index.php?page=post&s=random', ta
 
     all_the_tags = []
     for tag_type_idx in tag_types_idx:
-        tag_type = tag_types[tag_type_idx]
-        tags = [_ for _ in tab.findAll('li') if _.get("class") == [tag_type]]
-        all_the_tags.append([[_.text for _ in tag.findAll('a')][-1] for tag in tags])
-
+        try:
+            tag_type = tag_types[tag_type_idx]
+            tags = [_ for _ in tab.findAll('li') if _.get("class") == [tag_type]]
+            all_the_tags.append([[_.text for _ in tag.findAll('a')][-1] for tag in tags])
+        except Exception as e:
+            print('ERROR:', e)
     all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
     all_the_tags = all_the_tags.replace('_', ' ')
     all_the_tags = all_the_tags.replace('(', '\(').replace(')', '\)')
@@ -153,10 +168,12 @@ def safebooru_dataset(url='https://safebooru.org/index.php?page=post&s=random', 
 
     all_the_tags = []
     for tag_type_idx in tag_types_idx:
-        tag_type = tag_types[tag_type_idx]
-        tags = [_ for _ in tab.findAll('li') if _.get('class') == tag_types[tag_type_idx]]
-        all_the_tags.append([[_.text for _ in tag.findAll('a')][-1] for tag in tags])
-
+        try:
+            tag_type = tag_types[tag_type_idx]
+            tags = [_ for _ in tab.findAll('li') if _.get('class') == tag_types[tag_type_idx]]
+            all_the_tags.append([[_.text for _ in tag.findAll('a')][-1] for tag in tags])
+        except Exception as e:
+            print('ERROR:', e)
 
     all_the_tags = ', '.join([', '.join(_) for _ in all_the_tags])
     all_the_tags = all_the_tags.replace('_', ' ')
@@ -205,11 +222,13 @@ def e621_dataset(url='https://e621.net/popular', tags_all=True, additional_tags=
 
     all_the_tags = []
     for tag_type_idx in tag_types_idx:
-        tag_type = tag_types[tag_type_idx]
-        tags = [_ for _ in tab.findAll('ul') if _.get("class") == [tag_types[tag_type_idx]]]
-        tags =  [_.text for _ in tags[0].findAll('a') if _.get("class") == ['search-tag']] 
-        all_the_tags.append([tags])
-
+        try:
+            tag_type = tag_types[tag_type_idx]
+            tags = [_ for _ in tab.findAll('ul') if _.get("class") == [tag_types[tag_type_idx]]]
+            tags =  [_.text for _ in tags[0].findAll('a') if _.get("class") == ['search-tag']] 
+            all_the_tags.append([tags])
+        except Exception as e:
+            print('ERROR:', e)
 
 
     flatten = lambda x: [y for l in x for y in flatten(l)] if type(x) is list else [x]
