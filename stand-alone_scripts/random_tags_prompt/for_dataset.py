@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import sys
 import random
 import shutil
-
+from time import sleep
 import cloudscraper
 
 ALL_THE_TAGS = True
@@ -262,20 +262,44 @@ def e621_dataset(url='https://e621.net/popular', tags_all=True, additional_tags=
 
 
 
+def download_from_source(source, url, additional_tags=''):
+    if 'gelbooru' in source:
+      gelbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    elif 'danbooru' in source:
+      danbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    elif 'safebooru' in source:
+      safebooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    elif 'e621' in source:
+      e621_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    else:
+      assert False, "You can only use links from gelbooru, danbooru and safebooru"
+
+
 argv = sys.argv
 
-url = sys.argv[1]
-source = url.split('.')[0]
-additional_tags = ' '.join(argv[2:])
 
+if sys.argv[1] != 'txt':
+    url = sys.argv[1]
+    source = url.split('.')[0]
+    additional_tags = ' '.join(argv[2:])
+    download_from_source(source, url, additional_tags)
+    # if 'gelbooru' in source:
+      # gelbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    # elif 'danbooru' in source:
+      # danbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    # elif 'safebooru' in source:
+      # safebooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    # elif 'e621' in source:
+      # e621_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    # else:
+      # assert False, "You can only use links from gelbooru, danbooru and safebooru"
 
-if 'gelbooru' in source:
-  gelbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
-elif 'danbooru' in source:
-  danbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
-elif 'safebooru' in source:
-  safebooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
-elif 'e621' in source:
-  e621_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
-else:
-  assert False, "You can only use links from gelbooru, danbooru and safebooru"
+elif sys.argv[1] == 'txt':
+    fname = sys.argv[2]
+    with open(fname, 'r') as f:
+        data = f.readlines()
+    for url in data:
+        url = url.strip()
+        source = url.split('.')[0]
+        download_from_source(source, url)
+        sleep(1)
