@@ -30,5 +30,6 @@ Experimental feature for `safebooru`:
 
 Downloads an image and create a txt file with all the tags.    
 
-Usage:  
-`python for_dataset.py "url-of-an-image"`  # Only from gelbooru, danbooru, safebooru and e621
+Usage:  # Only from gelbooru, danbooru, safebooru and e621  
+`python for_dataset.py "url-of-an-image"`    
+`python for_dataset.py txt "txt-file-with-urls.txt"` 
