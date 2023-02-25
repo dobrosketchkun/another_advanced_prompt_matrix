@@ -13,6 +13,8 @@ Generates a prompt of random danbooru tags (names and sources mostly excluded)
   - [random_tags_booru.py
 ](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/stand-alone_scripts/random_tags_prompt)   
 Generates a prompt of random danbooru, gelbooru or safebooru posts (by default it uses only general tags, it could be changed inside)
+  - [for_dataset.py](https://github.com/dobrosketchkun/yet_another_stable_diffusion_webui_scripts_repository/tree/main/stand-alone_scripts/random_tags_prompt#for_datasetpy)   
+Dowloads image and tags (as a txt file) for further dataset creation  
 
 
 
