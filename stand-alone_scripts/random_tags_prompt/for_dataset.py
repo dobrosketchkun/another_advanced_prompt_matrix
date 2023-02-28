@@ -5,6 +5,8 @@ import random
 import shutil
 from time import sleep
 import cloudscraper
+from tqdm import tqdm
+
 
 ALL_THE_TAGS = True
 
@@ -85,7 +87,7 @@ def danbooru_dataset(url='https://danbooru.donmai.us/posts/random', tags_all=Tru
   all_the_tags = additional_tags + ' ' + all_the_tags
 
   text_file_name = file_name.split('.')[0] + '.txt'
-  with open(text_file_name, 'w') as f:
+  with open(text_file_name, 'w', encoding='utf-8') as f:
     f.write(all_the_tags)
 
 
@@ -140,7 +142,7 @@ def gelbooru_dataset(url='https://gelbooru.com/index.php?page=post&s=random', ta
     all_the_tags = additional_tags + ' ' + all_the_tags
 
     text_file_name = file_name.split('.')[0] + '.txt'
-    with open(text_file_name, 'w') as f:
+    with open(text_file_name, 'w', encoding='utf-8') as f:
       f.write(all_the_tags)
 
 
@@ -197,7 +199,7 @@ def safebooru_dataset(url='https://safebooru.org/index.php?page=post&s=random', 
     all_the_tags = additional_tags + ' ' + all_the_tags
 
     text_file_name = file_name.split('.')[0] + '.txt'
-    with open(text_file_name, 'w') as f:
+    with open(text_file_name, 'w', encoding='utf-8') as f:
       f.write(all_the_tags)
 
 def e621_dataset(url='https://e621.net/popular', tags_all=True, additional_tags= ''): 
@@ -257,7 +259,7 @@ def e621_dataset(url='https://e621.net/popular', tags_all=True, additional_tags=
     all_the_tags = additional_tags + ' ' + all_the_tags
 
     text_file_name = file_name.split('.')[0] + '.txt'
-    with open(text_file_name, 'w') as f:
+    with open(text_file_name, 'w', encoding='utf-8') as f:
       f.write(all_the_tags)
 
 
@@ -282,7 +284,11 @@ if sys.argv[1] != 'txt':
     url = sys.argv[1]
     source = url.split('.')[0]
     additional_tags = ' '.join(argv[2:])
-    download_from_source(source, url, additional_tags)
+    try:
+        download_from_source(source, url, additional_tags)
+    except Exception as e:
+        print('ERROR', e, url)
+        
     # if 'gelbooru' in source:
       # gelbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
     # elif 'danbooru' in source:
@@ -298,8 +304,12 @@ elif sys.argv[1] == 'txt':
     fname = sys.argv[2]
     with open(fname, 'r') as f:
         data = f.readlines()
-    for url in data:
-        url = url.strip()
-        source = url.split('.')[0]
-        download_from_source(source, url)
-        sleep(1)
+    for url in tqdm(data):
+        try:
+            url = url.strip()
+            source = url.split('.')[0]
+            download_from_source(source, url)
+            sleep(1)
+        except Exception as e:
+            print('ERROR', e, url)
+            
