@@ -22,7 +22,7 @@ class Script(scripts.Script):
         Usage: `?white|red|glowing|blue|yellow|pink? hair, $headwear@0.3$`   
         `?x|y|z?` - random from a list   
         `$headwear@0.3$` - headwear will appear with a probability of 30%  
-        %%This is a comment and it will be deleted from the prompt%%
+        `%%This is a comment and it will be deleted from the prompt%%`
         ''')
         checkbox_iterate = gr.Checkbox(label="Iterate seed every line", value=True)
         checkbox_iterate_batch = gr.Checkbox(label="Use same random seed for all lines", value=False)
