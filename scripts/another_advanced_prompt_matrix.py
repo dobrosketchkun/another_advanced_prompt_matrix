@@ -21,7 +21,8 @@ class Script(scripts.Script):
         info = gr.Markdown('''
         Usage: `?white|red|glowing|blue|yellow|pink? hair, $headwear@0.3$`   
         `?x|y|z?` - random from a list   
-        `$headwear@0.3$` - headwear will appear with a probability of 30%   
+        `$headwear@0.3$` - headwear will appear with a probability of 30%  
+        %%This is a comment and it will be deleted from the prompt%%
         ''')
         checkbox_iterate = gr.Checkbox(label="Iterate seed every line", value=True)
         checkbox_iterate_batch = gr.Checkbox(label="Use same random seed for all lines", value=False)
@@ -45,6 +46,9 @@ class Script(scripts.Script):
         if counts == '':
             counts = '1'
         for _ in range(int(counts)):
+            
+            original_prompt = re.sub(r'%%.*?%%', '', original_prompt)
+            
             pattern = re.compile(r'[\$\$]+')
             split1 = list(filter(None, pattern.split(original_prompt)))
 
