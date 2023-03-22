@@ -264,6 +264,71 @@ def e621_dataset(url='https://e621.net/popular', tags_all=True, additional_tags=
 
 
 
+
+def e926_dataset(url='https://e926.net/popular', tags_all=True, additional_tags= ''): 
+    r = requests.get(url, headers=headers, allow_redirects=True)
+
+
+    soup = BeautifulSoup(r.text,'html.parser')
+    tab = soup.find("section",{"id":"tag-list"})
+
+
+    tag_types =['artist-tag-list',
+                'species-tag-list',
+                'general-tag-list',
+                'meta-tag-list']
+
+
+    if tags_all:
+      tag_types_idx = [0, 1, 2]
+    else:
+      tag_types_idx = [1, 2]
+
+
+    all_the_tags = []
+    for tag_type_idx in tag_types_idx:
+        try:
+            tag_type = tag_types[tag_type_idx]
+            tags = [_ for _ in tab.findAll('ul') if _.get("class") == [tag_types[tag_type_idx]]]
+            tags =  [_.text for _ in tags[0].findAll('a') if _.get("class") == ['search-tag']] 
+            all_the_tags.append([tags])
+        except Exception as e:
+            print('ERROR:', e)
+
+
+    flatten = lambda x: [y for l in x for y in flatten(l)] if type(x) is list else [x]
+    all_the_tags = flatten(all_the_tags)
+
+
+
+    all_the_tags = ', '.join( all_the_tags)
+    all_the_tags = all_the_tags.replace('_', ' ')
+    all_the_tags = all_the_tags.replace('(', '\(').replace(')', '\)')
+
+    img_link = r.text.split('<meta property="og:image" content="')[1].split('">')[0]
+
+    file_name = img_link.split('/')[-1]
+
+    res = requests.get(img_link, stream = True, headers=headers, allow_redirects=True)
+
+    if res.status_code == 200:
+        with open(file_name,'wb') as f:
+            shutil.copyfileobj(res.raw, f)
+        print('Image sucessfully Downloaded: ',file_name)
+    else:
+        print('Image Couldn\'t be retrieved')
+
+
+    all_the_tags = additional_tags + ' ' + all_the_tags
+
+    text_file_name = file_name.split('.')[0] + '.txt'
+    with open(text_file_name, 'w', encoding='utf-8') as f:
+      f.write(all_the_tags)
+
+
+
+
+
 def download_from_source(source, url, additional_tags=''):
     if 'gelbooru' in source:
       gelbooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
@@ -273,6 +338,8 @@ def download_from_source(source, url, additional_tags=''):
       safebooru_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
     elif 'e621' in source:
       e621_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
+    elif 'e926' in source:
+      e926_dataset(url=url, tags_all=ALL_THE_TAGS, additional_tags=additional_tags)
     else:
       assert False, "You can only use links from gelbooru, danbooru and safebooru"
 
