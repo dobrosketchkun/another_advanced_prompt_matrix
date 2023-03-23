@@ -112,6 +112,90 @@ def get_safebooru(url='https://safebooru.org/index.php?page=post&s=random'):
     all_the_tags = all_the_tags.replace('_', ' ')
     return r.url + '\n'*2 + all_the_tags
 
+
+def get_e926(url='https://e926.net/popular', tags_all=True, additional_tags= ''): 
+    r = requests.get(url, headers=headers, allow_redirects=True)
+
+
+    soup = BeautifulSoup(r.text,'html.parser')
+    tab = soup.find("section",{"id":"tag-list"})
+
+
+    tag_types =['artist-tag-list',
+                'species-tag-list',
+                'general-tag-list',
+                'meta-tag-list']
+
+
+    if tags_all:
+      tag_types_idx = [0, 1, 2]
+    else:
+      tag_types_idx = [1, 2]
+
+
+    all_the_tags = []
+    for tag_type_idx in tag_types_idx:
+        try:
+            tag_type = tag_types[tag_type_idx]
+            tags = [_ for _ in tab.findAll('ul') if _.get("class") == [tag_types[tag_type_idx]]]
+            tags =  [_.text for _ in tags[0].findAll('a') if _.get("class") == ['search-tag']] 
+            all_the_tags.append([tags])
+        except Exception as e:
+            print('ERROR:', e)
+
+
+    flatten = lambda x: [y for l in x for y in flatten(l)] if type(x) is list else [x]
+    all_the_tags = flatten(all_the_tags)
+
+
+
+    all_the_tags = ', '.join( all_the_tags)
+    all_the_tags = all_the_tags.replace('_', ' ')
+    all_the_tags = all_the_tags.replace('(', '\(').replace(')', '\)')
+    return r.url + '\n'*2 + all_the_tags
+
+def get_e621(url='https://e926.net/popular', tags_all=True, additional_tags= ''): 
+    r = requests.get(url, headers=headers, allow_redirects=True)
+
+
+    soup = BeautifulSoup(r.text,'html.parser')
+    tab = soup.find("section",{"id":"tag-list"})
+
+
+    tag_types =['artist-tag-list',
+                'species-tag-list',
+                'general-tag-list',
+                'meta-tag-list']
+
+
+    if tags_all:
+      tag_types_idx = [0, 1, 2]
+    else:
+      tag_types_idx = [1, 2]
+
+
+    all_the_tags = []
+    for tag_type_idx in tag_types_idx:
+        try:
+            tag_type = tag_types[tag_type_idx]
+            tags = [_ for _ in tab.findAll('ul') if _.get("class") == [tag_types[tag_type_idx]]]
+            tags =  [_.text for _ in tags[0].findAll('a') if _.get("class") == ['search-tag']] 
+            all_the_tags.append([tags])
+        except Exception as e:
+            print('ERROR:', e)
+
+
+    flatten = lambda x: [y for l in x for y in flatten(l)] if type(x) is list else [x]
+    all_the_tags = flatten(all_the_tags)
+
+
+
+    all_the_tags = ', '.join( all_the_tags)
+    all_the_tags = all_the_tags.replace('_', ' ')
+    all_the_tags = all_the_tags.replace('(', '\(').replace(')', '\)')
+    return r.url + '\n'*2 + all_the_tags
+
+
 # def download_page(prompt):
 #     ''' for gcolab use '''
 #     url_page = '"' + prompt.split('\n')[0] + '"'
@@ -123,7 +207,7 @@ def get_safebooru(url='https://safebooru.org/index.php?page=post&s=random'):
 #     !wget $url_img -O 'img.jpg' -q
 #     display(Image('img.jpg'))
 
-# gelbooru, danbooru, safebooru
+# gelbooru, danbooru, safebooru, e621, e926
 try:
     ARGV = sys.argv
     SOURCE = ARGV[1]
@@ -185,7 +269,19 @@ elif SOURCE == 'safebooru':
     prompt = get_safebooru(url)
     print_p(prompt)
 
+elif SOURCE == 'e926':
+    if not url:
+        url = 'https://e926.net/popular'
+    prompt = get_e926(url)
+    print_p(prompt)
+
+elif SOURCE == 'e621':
+    if not url:
+        url = 'https://e621.net/popular'
+    prompt = get_e621(url)
+    print_p(prompt)
+
 
 else:
-    print('You can use only gelbooru, danbooru or safebooru links!')
+    print('You can use only gelbooru, danbooru, safebooru, e621 or e926 links!')
     print(f'Your arguments are { ARGV}')
