@@ -14,9 +14,9 @@ You can get tags in [this repository](https://github.com/DominikDoom/a1111-sd-we
 
 Generates a prompt of random danbooru or gelbooru posts (by default it uses only general tags, it could be changed inside)    
 
-Usage:  
+Usage :  
 `python random_tags_booru.py` - fetched tags from the SOURCE variable site   
-`python random_tags_booru.py BOORU`  -  fetched tags from the explicitly stated site (gelbooru, danbooru or safebooru)    
+`python random_tags_booru.py BOORU`  -  fetched tags from the explicitly stated site (supports danbooru, gelbooru, safebooru, e926, and e621)   
 
 
 You also can fetch tags from a specific post from the booru site:   
